@@ -1,10 +1,10 @@
-# %% [markdown]
-# Modules
-
-# %%
 #We install pandas to store the dataframes. Dataframes are used to store our weather and commodity price datasets.
 import pandas as pd 
 import numpy as np
+
+#CSV is imported as we are also working with .CSV files and pandas dataframes interchangeably.
+import csv
+
 #Sklearn is an open-source machine learning library in python and is what we use within our program to implement an SVM.
 from sklearn.svm import SVC
 
@@ -14,8 +14,7 @@ from sklearn.preprocessing import scale
 #Grid-search cross validation module is also used to do the grid search cross validation if our program doesn't do it manually.
 from sklearn.model_selection import GridSearchCV
 
-#CSV is imported as we are also working with .CSV files and pandas dataframes interchangeably.
-import csv
+
 
 #Datatime is used to handle dates, they are all in the form ISO8601 so can be easily accessed and understood.
 from datetime import datetime, timedelta
@@ -46,24 +45,20 @@ from tkinter import messagebox
 
 import matplotlib.pyplot as plt
 
-from matplotlib.backends.backend_tkagg import (
-     FigureCanvasTkAgg, NavigationToolbar2Tk)
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 
+#Added support for advanced error handling to filter through and catch errors before they are shown to the user.
+import warnings
+import logging
 
-# %% [markdown]
-# Data Sources (for easy access)
-
-# %%
 global worldBank_url
 worldBank_url = "https://www.worldbank.org/en/research/commodity-markets#1"
 
 global cropIndex # This is a global crop index with all the possible crops we have available.
 cropIndex = ['cocoa','soybean','corn','wheat','sugar']
 
-# %% [markdown]
-# Error Handling
-
-# %%
+#Suppresses logs about the systems CPU Architecture. e.g Apple Silicon(RISC)
+logging.getLogger('IMK').setLevel(logging.WARNING)
 
 # This is an error alert function and will be what is called when an error is caught within the program.
 #This function allows the program to make decisions when errors occur.
@@ -80,7 +75,6 @@ def errorAlert(error,type):
         type == 'hard reset'
         print('hard reset - resetting entire program')
 
-errorAlert('no internet','hard reset')
 
 # %% [markdown]
 # Retrieve Historical Weather Data
@@ -91,31 +85,30 @@ errorAlert('no internet','hard reset')
 #  
 #The volume spread indicates what percentage of the produce that each location produces. 
 
-cocoaCoordinates = [[6.053110308791517, -5.632365625597256], 
-                    [5.723258880120529, -2.0289499687551404], 
-                    [-1.4526661026550038, -80.30948687187554]]
-cocoaVolumeSpread = [0.660, 0.187, 0.153]
+cocoaCoordinates = ((6.053110308791517, -5.632365625597256),
+                    (5.723258880120529, -2.0289499687551404),
+                    (-1.4526661026550038, -80.30948687187554))
+cocoaVolumeSpread = (0.660, 0.187, 0.153)
 
-soybeanCoordinates = [[-19.64619384124217, -54.26514130936858],
-                      [42.29404827977364, -92.81193554839746],
-                      [-35.06747636366788, -58.071092994544266]]
-soybeanVolumeSpread = [0.487, 0.360, 0.153]
+soybeanCoordinates = ((-19.64619384124217, -54.26514130936858),
+                      (42.29404827977364, -92.81193554839746),
+                      (-35.06747636366788, -58.071092994544266))
+soybeanVolumeSpread = (0.487, 0.360, 0.153)
 
-sugarCoordinates = [[-22.591058675268453, -48.380706513546365],
-                    [27.512949904632368, 80.63046034857008],
-                    [16.17804967961032, 103.56698522101857]]
-sugarVolumeSpread = [0.471, 0.404, 0.125]
+sugarCoordinates = ((-22.591058675268453, -48.380706513546365),
+                    (27.512949904632368, 80.63046034857008),
+                    (16.17804967961032, 103.56698522101857))
+sugarVolumeSpread = (0.471, 0.404, 0.125)
 
-wheatCoordinates = [[33.91053065183956, 113.67123697952496],
-                    [47.904101854372406, 2.055730082984269],
-                    [27.166528613792373, 80.59817535483508]]
-wheatVolumeSpread = [0.357, 0.353, 0.290]
+wheatCoordinates = ((33.91053065183956, 113.67123697952496),
+                    (47.904101854372406, 2.055730082984269),
+                    (27.166528613792373, 80.59817535483508))
+wheatVolumeSpread = (0.357, 0.353, 0.290)
 
-cornCoordinates = [[42.685090443052125, -93.32174099559683],
-                   [40.954928136698115, 117.03116790283333],
-                   [-11.258015767551417, -54.79968906997016]]
-cornVolumeSpread = [0.474, 0.377, 0.149]
-
+cornCoordinates = ((42.685090443052125, -93.32174099559683),
+                   (40.954928136698115, 117.03116790283333),
+                   (-11.258015767551417, -54.79968906997016))
+cornVolumeSpread = (0.474, 0.377, 0.149)
 
 def verifyCoordinateValidity(latitude,longitude):#Returns validity of the coordinates
     try:
@@ -212,7 +205,7 @@ def retrieve_historical_climate(crop):#This entire function can retrieve all the
         latitude, longitude = globals()[crop + 'Coordinates'][i] #Using globals() instead of using multiple if statements for each crop we can write efficient code. This means that we can directly call the crop's coordinates.
         coordinateValidity = verifyCoordinateValidity(latitude, longitude)#We use validation to verify that the coordinates are correct and valid. 
 
-        if coordinateValidity == 'valid values':#If the specific coordinaetes are valid we can generate each historical weather dataframe one at a time.
+        if coordinateValidity == 'valid values':#If the specific coordinates are valid we can generate each historical weather dataframe one at a time.
             globals()['historicalWeather' + str(i + 1)] = openMeteo_historical_climate(latitude, longitude) #Generates 3 different dataframes, one for each country
 
         #If data is incorrect we catch it before the error is allowed to propogate and call the error function.
@@ -221,7 +214,7 @@ def retrieve_historical_climate(crop):#This entire function can retrieve all the
         else:
             errorAlert('Coordinates could not be validated. No data has been requested from the API OpenMeteo.','hard reset')
     
-    historicalWeather1.to_csv('historicalWeather1.csv', sep=',', index=False, encoding='utf-8') #Saves the dataset as a .csv file. This allows for physical debugging as we have can see the .csv file in human readable format as a csv is tabular.
+    historicalWeather1.to_csv('historicalWeather1.csv', sep=',', index=False, encoding='utf-8') #Saves the dataset as a .csv file. This allows for physical debugging as we have can see the .csv file in human read-able format as a csv is tabular.
     historicalWeather2.to_csv('historicalWeather2.csv', sep=',', index=False, encoding='utf-8') #.csv files and dataframes are interchangeable so it is efficient to save all weather datasets as CSVs.
     historicalWeather3.to_csv('historicalWeather3.csv', sep=',', index=False, encoding='utf-8') 
 
@@ -411,7 +404,7 @@ def retrieve_forecasted_climate(crop): #This entire function can retrieve all th
                                                 (combined_dataframe['relative_humidity_2m'] != None) &
                                                 (combined_dataframe['precipitation'] != None)]
     
-    combined_dataframe['date'] = pd.to_datetime(combined_dataframe['date'])  # Ensure 'date' is datetime type
+    combined_dataframe['date'] = pd.to_datetime(combined_dataframe['date'], format='mixed')  # Ensure 'date' is datetime type
 
     #Defines the split of the data into four time segments. Each of which has a length of 4 days.
     combined_dataframe['time_segment'] = pd.cut(combined_dataframe['date'], bins=4, labels=['Days 1-4', 'Days 5-8', 'Days 9-12', 'Days 13-16'])
@@ -508,9 +501,13 @@ def classify_commodityPrice_Dataframe(crop,commodityPricesDataframe):#Labels to 
     commodityPricesDataframe = commodityPricesDataframe.iloc[1:].reset_index(drop=True)
     commodityPricesDataframe.iloc[:, 1] = pd.to_numeric(commodityPricesDataframe.iloc[:, 1])
 
+    #Filters out unnecessary errors produced by the program
+    warnings.filterwarnings('ignore', category=FutureWarning, message="Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated")
+
     # Calculate percentage change
     commodityPricesDataframe['Percentage Change'] = commodityPricesDataframe.iloc[:, 1].pct_change() * 100
-    commodityPricesDataframe.fillna(0, inplace=True)  # Fill NaN with 0 for the first row
+    commodityPricesDataframe['Percentage Change'] = commodityPricesDataframe['Percentage Change'].astype(float).fillna(0)
+
 
     # Round percentage change to an integer
     commodityPricesDataframe['Percentage Change'] = commodityPricesDataframe['Percentage Change'].round(0)
@@ -580,7 +577,7 @@ def findOptimal_hyperparameters(crop):
 
 
     # Run GridSearchCV in a subprocess and capture output. Virtual environment!
-    command = ["python", "-c", 
+    command = ["python3", "-c",
                "from sklearn.model_selection import GridSearchCV; " 
                "from sklearn.svm import SVC; "
                "import numpy as np; "# Import numpy if needed for X_scaled and y
@@ -682,10 +679,9 @@ def impute_missing(dataframe):
             #This means there is no need to create an inefficient for loop to loop through all the values and columns.
 
             #These specific elements are then replaced with the mean of the collumn.
-            dataframe[column] = dataframe[column].fillna(dataframe[column].mean())
+            dataframe[column] = dataframe[column].astype(float).fillna(dataframe[column].mean())
     
     return dataframe
-
 # %%
 custom_cValue = None
 custom_gammaValue = None
@@ -798,7 +794,7 @@ def processing_page(crop):
             
             progress_canvas.update_idletasks()#This prevents tkinter from running anything past this point before the previous tasks have been completed / rendered.
 
-            time.sleep(1)#This allows tkinter to render all the content as if we are producing data before tkinter is able to render it, the screen remains empty.
+
 
         except:
             update_error_text('ERROR - Retrieving Data see the python terminal')#We catch the errors and display it to the user both in tkinter and in the python command line interface.
@@ -811,7 +807,7 @@ def processing_page(crop):
             #Update the progress to show this
             update_progress(20)
             update_progress_text('Labelled Crop Price Data')
-            time.sleep(1)
+
 
             progress_canvas.update_idletasks()
         except:
@@ -821,7 +817,7 @@ def processing_page(crop):
         update_progress(30)
         update_progress_text('Training the model...')
         findOptimal_hyperparameters(crop)
-        time.sleep(1)
+
 
         #If the user has not set custom C and Gamma hyperparameter values then we can use the grid-search cross validation to find these optimal values and deliver it to the user.
 
@@ -840,7 +836,7 @@ def processing_page(crop):
 
         update_progress_text('Predicting the future...')
         update_progress(80)
-        time.sleep(1)    
+
         
         #We want the predictions to have a global scope so we can access it across the entire program.
         global predictions
@@ -848,12 +844,12 @@ def processing_page(crop):
         predictions = [] #We set the predictions to make sure it is empty before we add the new predictions to the dataset.
 
         predictions = predict(crop, trainedModel)
-        print(predictions)
+
         update_progress_text('Complete')
         update_progress(100)
-        time.sleep(1)
+
     
-    root.after(100, processingTasks())#We run the processingTasks function 100ms or 0.1s after the entire program to let tkinter render all their content correctly.
+    root.after(0, processingTasks())#We run the processingTasks function 100ms or 0.1s after the entire program to let tkinter render all their content correctly.
     output_page(crop)
 
 def output_page(crop):#This is the output page where we output the graph and the predictions onto a suitable interactive page.
@@ -1006,5 +1002,3 @@ if __name__ == "__main__":
     crop_selection_page()
 
     root.mainloop()
-
-
