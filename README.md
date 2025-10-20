@@ -1,3 +1,5 @@
+https://media.licdn.com/dms/image/v2/D4E3DAQEvsMY5JqpxeQ/image-scale_191_1128/image-scale_191_1128/0/1726350998662/n_cover?e=1761598800&v=beta&t=fGs4qWbePvQV1fWVCP-bgQ5Aw4KGPjOp4vKmRXcc5yY<img width="1128" height="191" alt="image" src="https://github.com/user-attachments/assets/46b4083a-5b6f-4a18-a7d5-3efd0ffa5cdd" />
+
 Scion - A tool that forecasts agricultural commodities using climate patterns. 
 
 Our solution forecasts the price of agricultuarl commodities up to 16 days in the future accurately.
