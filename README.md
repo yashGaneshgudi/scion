@@ -6,7 +6,6 @@ Scion - A tool that forecasts agricultural commodities using climate patterns.
  
 References:
 
-
 ["How Weather Drives Commodity Prices" - Doug Christie, NASDAQ](https://www.nasdaq.com/articles/how-weather-drives-commodity-prices)
 
 ["Climate Change and the impact on agriculture" - JP Morgan](https://www.jpmorgan.com/insights/global-research/sustainability/climate-change-agriculture)
