@@ -10,6 +10,7 @@ https://www.nasdaq.com/articles/how-weather-drives-commodity-prices
 "Climate Change and the impact on agriculture" - JP Morgan
 https://www.jpmorgan.com/insights/global-research/sustainability/climate-change-agriculture
 
-<img src="https://www.jpmorgan.com/content/dam/jpm/cib/complex/content/research/climate_change_agriculture_2022/Agricultural_Supply_Graph.svg">
+<img width="1574" height="1346" alt="image" src="https://github.com/user-attachments/assets/bf87c1e5-7759-44b4-b5bd-0e26273d5886" />
+
 We cover the following agricultural commodities due to their dependancy on the weather of where they are grown:
 - Cocoa, Wheat, Corn, Soybean and Sugar.
