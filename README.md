@@ -2,13 +2,15 @@
 
 Scion - A tool that forecasts agricultural commodities using climate patterns. 
 
-Our solution forecasts the price of agricultuarl commodities up to 16 days in the future accurately.
+Inspired by 
 
-The below shows predictions produced from our tool.
+"How Weather Drives Commodity Prices" - Doug Christie NASDAQ
+https://www.nasdaq.com/articles/how-weather-drives-commodity-prices
 
-![image](https://github.com/user-attachments/assets/99aad53c-6a9d-4fc9-ae36-bd4c974b690c)
+"Climate Change and the impact on agriculture" - JP Morgan
+https://www.jpmorgan.com/insights/global-research/sustainability/climate-change-agriculture
 
-![image](https://github.com/user-attachments/assets/3975167f-9f48-4310-a29a-0bf776c06f51)
+https://www.jpmorgan.com/content/dam/jpm/cib/complex/content/research/climate_change_agriculture_2022/Agricultural_Supply_Graph.svg
 
 
 We cover the following agricultural commodities due to their dependancy on the weather of where they are grown:
