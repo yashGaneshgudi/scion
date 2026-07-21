@@ -1,4 +1,4 @@
-<img width="1128" height="191" alt="image" src="https://github.com/user-attachments/assets/46b4083a-5b6f-4a18-a7d5-3efd0ffa5cdd" />
+<img width="1280" height="353" alt="image" src="https://github.com/user-attachments/assets/90cd1d05-baea-451c-8cb9-b25fe531ec52" />
 
 Atlas - A tool that forecasts agricultural commodities using climate patterns. 
 
